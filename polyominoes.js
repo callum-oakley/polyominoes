@@ -6,7 +6,7 @@ const transformations = [
   ([ x, y ]) => [ -x,  y ], // reflect in x axis
   ([ x, y ]) => [  x, -y ], // reflect in y axis
   ([ x, y ]) => [  y,  x ], // reflect in x = y
-  ([ x, y ]) => [ -y,  x ]  // reflect in x = -y
+  ([ x, y ]) => [ -y, -x ]  // reflect in x = -y
 ];
 
 class Polyomino {
@@ -16,9 +16,9 @@ class Polyomino {
   static normalize(representation) {
     const dx = Math.min(...representation.map(([ x, y ]) => x));
     const dy = Math.min(...representation.map(([ x, y ]) => y));
-    // Make the co-ordinates as small as possible, while all still positive,
-    // sort, and stringify
-    return JSON.stringify(representation.map(([ x, y ]) => [ x - dx, y - dy ]).sort());
+    // Make the co-ordinates as small as possible, while all still positive
+    const normalized = representation.map(([ x, y ]) => [ x - dx, y - dy ])
+    return JSON.stringify(normalized.sort());
   }
 
   constructor(representation) {
@@ -30,12 +30,12 @@ class Polyomino {
     );
   }
 
-  // Tests if the polynomio is represented by the provided list of squares
+  // Tests if the polyomino is represented by the provided list of squares
   isRepresentedBy(representation) {
     return this.representations.has(Polyomino.normalize(representation));
   }
 
-  // Gets an arbitrary represenation of the polynomio
+  // Gets an arbitrary represenation of the polyomino
   get representation() {
     return JSON.parse(this.representations.values().next().value);
   }
@@ -53,7 +53,7 @@ function* grow(representation) {
   for ([ x, y ] of representation) {
     for ([ dx, dy ] of directions) {
       if (!containsSquare(representation, [ x + dx, y + dy ])) {
-        yield [ ...representation, [ x + dx, y + dy ] ]
+        yield [ ...representation, [ x + dx, y + dy ] ];
       }
     }
   }
@@ -65,7 +65,7 @@ function alreadyRepresented(polyominoes, representation) {
   return polyominoes.some(p => p.isRepresentedBy(representation));
 }
 
-// Returns all free polyominoes consisting of n or fewer squares
+// Returns an array of all free n-ominoes
 function polyominoes(n) {
   const ominoes = { 1: [ new Polyomino([ [ 0, 0 ] ]) ] };
   for (let i = 2; i <= n; i++) {
@@ -78,7 +78,17 @@ function polyominoes(n) {
       }
     }
   }
-  return ominoes;
+  return ominoes[n];
 }
 
 module.exports = polyominoes;
+
+// # Usage examples
+//
+// Find out how many 8-ominoes there are:
+//
+//     polyominoes(8).length;
+//
+// Get an array consisting of a single representation for each of them:
+//
+//     polyominoes(8).map(p => p.representation);
