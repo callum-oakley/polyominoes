@@ -12,7 +12,7 @@ def normalize(representation):
 # rotations and reflections.
 
 def newPolyomino(representation):
-    return frozenset(normalize(r) for r in (
+    return frozenset(normalize(r) for r in [
         {( x,  y) for x, y in representation}, # identity
         {(-y,  x) for x, y in representation}, # rotate pi/2
         {(-x, -y) for x, y in representation}, # rotate pi
@@ -21,7 +21,7 @@ def newPolyomino(representation):
         {( x, -y) for x, y in representation}, # reflect in y axis
         {( y,  x) for x, y in representation}, # reflect in y = x
         {(-y, -x) for x, y in representation}  # reflect in y = -x
-    ))
+    ])
 
 # It's useful to be able to get a single representation for a given polyomino.
 
