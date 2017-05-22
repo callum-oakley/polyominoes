@@ -4,27 +4,24 @@
 # least one x co-ordinate is 0 and at least one y co-ordinate is 0.
 
 def normalize(representation):
-    dx = min(x for (x, _) in representation)
-    dy = min(y for (_, y) in representation)
-    return frozenset((x - dx, y - dy) for (x, y) in representation)
+    dx = min(x for x, _ in representation)
+    dy = min(y for _, y in representation)
+    return frozenset((x - dx, y - dy) for x, y in representation)
 
 # We'll store a polyomino as a set of the normalized representations of all its
 # rotations and reflections.
 
 def newPolyomino(representation):
-    transformations = [
-        lambda s: ( s[0],  s[1]), # identity
-        lambda s: (-s[1],  s[0]), # rotate pi/2
-        lambda s: (-s[0], -s[1]), # rotate pi
-        lambda s: ( s[1], -s[0]), # rotate 3pi/2
-        lambda s: (-s[0],  s[1]), # reflect in x axis
-        lambda s: ( s[0], -s[1]), # reflect in y axis
-        lambda s: ( s[1],  s[0]), # reflect in y = x
-        lambda s: (-s[1], -s[0])  # reflect in y = -x
-    ]
-    return frozenset(
-        normalize({t(s) for s in representation}) for t in transformations
-    )
+    return frozenset(normalize(r) for r in (
+        {( x,  y) for x, y in representation}, # identity
+        {(-y,  x) for x, y in representation}, # rotate pi/2
+        {(-x, -y) for x, y in representation}, # rotate pi
+        {( y, -x) for x, y in representation}, # rotate 3pi/2
+        {(-x,  y) for x, y in representation}, # reflect in x axis
+        {( x, -y) for x, y in representation}, # reflect in y axis
+        {( y,  x) for x, y in representation}, # reflect in y = x
+        {(-y, -x) for x, y in representation}  # reflect in y = -x
+    ))
 
 # It's useful to be able to get a single representation for a given polyomino.
 
@@ -36,8 +33,8 @@ def represent(polyomino):
 def grow(polyomino):
     directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
     representation = represent(polyomino)
-    for (x, y) in representation:
-        for (dx, dy) in directions:
+    for x, y in representation:
+        for dx, dy in directions:
             if (x + dx, y + dy) not in representation:
                 yield newPolyomino(representation.union({(x + dx, y + dy)}))
 
