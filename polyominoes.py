@@ -31,10 +31,9 @@ def represent(polyomino):
 # We can build (n + 1)-ominoes by adding squares to n-ominoes
 
 def grow(polyomino):
-    directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
     representation = represent(polyomino)
     for x, y in representation:
-        for dx, dy in directions:
+        for dx, dy in [(1, 0), (0, 1), (-1, 0), (0, -1)]:
             if (x + dx, y + dy) not in representation:
                 yield newPolyomino(representation.union({(x + dx, y + dy)}))
 
