@@ -47,14 +47,22 @@ def polyominoes(n):
     ominoes = {1: {newPolyomino({(0, 0)})}}
     for i in range(1, n):
         ominoes[i + 1] = {a for b in ominoes[i] for a in grow(b)}
-    return ominoes[n]
+    return [represent(p) for p in ominoes[n]]
 
-# Examle usage:
-#
-# How many 10-ominoes are there?
-#
-#     len(polyominoes(10))
-#
-# Get a list containing a single representation for each of them:
-#
-#     [represent(p) for p in polyominoes(10)]
+# Let's also provide a function to draw them, just for fun
+
+def draw(representation):
+    for x in range(len(representation)):
+        for y in range(len(representation)):
+            if (x, y) in representation:
+                print("#", end=" ")
+            else:
+                print("·", end=" ")
+        print()
+
+# Or to draw the whole set
+
+def drawBatch(representations):
+    for r in representations:
+        draw(r)
+        print()
