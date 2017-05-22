@@ -48,3 +48,13 @@ def polyominoes(n):
     for i in range(1, n):
         ominoes[i + 1] = {a for b in ominoes[i] for a in grow(b)}
     return ominoes[n]
+
+# Examle usage:
+#
+# How many 10-ominoes are there?
+#
+#     len(polyominoes(10))
+#
+# Get a list containing a single representation for each of them:
+#
+#     [represent(p) for p in polyominoes(10)]
