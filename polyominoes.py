@@ -29,7 +29,7 @@ def newPolyomino(representation):
 # It's useful to be able to get a single representation for a given polyomino.
 
 def represent(polyomino):
-    return next(iter(polyomino))
+    return set(next(iter(polyomino)))
 
 # We can build (n + 1)-ominoes by adding squares to n-ominoes
 
