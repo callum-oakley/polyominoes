@@ -32,10 +32,13 @@ def represent(polyomino):
 
 def grow(polyomino):
     representation = represent(polyomino)
-    for x, y in representation:
-        for dx, dy in [(1, 0), (0, 1), (-1, 0), (0, -1)]:
-            if (x + dx, y + dy) not in representation:
-                yield newPolyomino(representation.union({(x + dx, y + dy)}))
+    edge = {
+        (x + dx, y + dy)
+        for x, y in representation
+        for dx, dy in [(1, 0), (0, 1), (-1, 0), (0, -1)]
+        if (x + dx, y + dy) not in representation
+    }
+    return (newPolyomino(representation.union({s})) for s in edge)
 
 # This is everything we need to generate the set of all n-ominoes...
 
