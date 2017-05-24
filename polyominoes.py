@@ -26,17 +26,17 @@ def represent(polyomino):
     return set(next(iter(polyomino)))
 
 # We can build (n + 1)-ominoes by adding squares to n-ominoes
-def grow(polyomino):
-    return (newPolyomino(represent(polyomino).union({s})) for s in {
+def grow(representation):
+    return (newPolyomino(representation.union({s})) for s in {
         (x + dx, y + dy)
-        for x, y in represent(polyomino)
+        for x, y in representation
         for dx, dy in [(1, 0), (0, 1), (-1, 0), (0, -1)]
-        if (x + dx, y + dy) not in represent(polyomino)
+        if (x + dx, y + dy) not in representation
     })
 
 # This is everything we need to generate the set of all n-ominoes...
 def polyominoes(n):
     ominoes = {1: {newPolyomino({(0, 0)})}}
     for i in range(1, n):
-        ominoes[i + 1] = {a for b in ominoes[i] for a in grow(b)}
+        ominoes[i + 1] = {a for b in ominoes[i] for a in grow(represent(b))}
     return [represent(p) for p in ominoes[n]]
