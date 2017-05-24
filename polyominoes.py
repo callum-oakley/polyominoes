@@ -18,7 +18,7 @@ def newPolyomino(representation):
         {(-x,  y) for x, y in representation}, # reflect in x axis
         {( x, -y) for x, y in representation}, # reflect in y axis
         {( y,  x) for x, y in representation}, # reflect in y = x
-        {(-y, -x) for x, y in representation}  # reflect in y = -x
+        {(-y, -x) for x, y in representation}, # reflect in y = -x
     ])
 
 # It's useful to be able to get a single representation for a given polyomino.
